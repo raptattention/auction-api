@@ -1,0 +1,2 @@
+class AreaCodesController < ApplicationController
+end
