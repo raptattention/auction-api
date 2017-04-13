@@ -1,36 +1,30 @@
 class BidsController < ApplicationController
-	before_action :set_user
+	before_action :set_product
 	before_action :set_bid, only: [:show, :update, :destroy]
 
-	# GET /user/:user_id/bids
+	# GET /products/:product_id/bids
 	def index
-    json_response(@user.bids)
+    json_response(@product.bids)
   end
 
-  # POST /user/:user_id/bids
+  # POST /products/:product_id/bids
   def create
-    @bid = @user.bids.create!(bid_params)
+    @bid = @product.bids.create!(bid_params)
     json_response(@bid, :created)
   end
 
-  # PUT /user/:user_id/bids/:id
+  # PUT /products/:product_id/bids/:id
   def update
     @bid.update(bid_params)
     json_response(@bid, :created)
   end
 
-  # GET /user/:user_id/bids/:id
+  # GET /products/:product_id/bids/:id
   def show
     json_response(@bid)
   end
 
-  # GET /product/:product_id/bids
-  def show_product_bids
-  	@product = Product.find_by!(id: params[:product_id])
-    json_response(@product.bids)
-  end
-
-  # DELETE /user/:user_id/bids/:id
+  # DELETE /products/:product_id/bids/:id
   def destroy
     @bid.destroy
     head :no_content
@@ -42,11 +36,11 @@ class BidsController < ApplicationController
     params.permit(:user_id, :product_id, :bidding_date, :price)
   end
 
-  def set_user
-    @user = User.find_by!(id: params[:user_id])
+  def set_product
+    @product = Product.find_by!(id: params[:product_id])
   end
 
   def set_bid
-    @bid = @user.bid.find_by!(id: params[:id]) if @user
+    @bid = @product.bid.find_by!(id: params[:id]) if @product
   end
 end
