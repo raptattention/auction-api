@@ -13,18 +13,18 @@ class AreaCodesController < ApplicationController
     json_response(@area_code, :created)
   end
 
-  # PUT /area_code/:id
+  # PUT /area_codes/:id
   def update
     @area_code.update(area_code_params)
     json_response(@area_code, :created)
   end
 
-  # GET /area_code/:id
+  # GET /area_codes/:id
   def show
     json_response(@area_code)
   end
 
-  # DELETE /area_code/:id
+  # DELETE /area_codes/:id
   def destroy
     @area_code.destroy
     head :no_content

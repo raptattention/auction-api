@@ -13,18 +13,18 @@ class ProductsController < ApplicationController
     json_response(@product, :created)
   end
 
-  # PUT /product/:id
+  # PUT /products/:id
   def update
     @product.update(product_params)
     json_response(@product, :created)
   end
 
-  # GET /product/:id
+  # GET /products/:id
   def show
     json_response(@product)
   end
 
-  # DELETE /product/:id
+  # DELETE /products/:id
   def destroy
     @product.destroy
     head :no_content

@@ -1,30 +1,31 @@
 class PhoneNumbersController < ApplicationController
+	before_action :set_user
 	before_action :set_phone_number, only: [:show, :update, :destroy]
 
-	# GET /phone_numbers
+	# GET /area_codes/:id/phone_numbers
 	def index
-    @phone_numbers = PhoneNumber.all
-    json_response(@phone_numbers)
+		@area_code = AreaCode.find_by!(id: params[:id])
+    json_response(@area_code.phone_number)
   end
 
-  # POST /phone_numbers
+  # POST /users/:id/phone_number
   def create
-    @phone_number = PhoneNumber.create!(phone_number_params)
+    @phone_number = @user.phone_number.create!(phone_number_params)
     json_response(@phone_number, :created)
   end
 
-  # PUT /phone_number/:id
+  # PUT /users/:id/phone_number
   def update
     @phone_number.update(phone_number_params)
     json_response(@phone_number, :created)
   end
 
-  # GET /phone_number/:id
+  # GET /users/:user_id/phone_number
   def show
     json_response(@phone_number)
   end
 
-  # DELETE /phone_number/:id
+  # DELETE /users/:id/phone_number
   def destroy
     @phone_number.destroy
     head :no_content
@@ -33,10 +34,14 @@ class PhoneNumbersController < ApplicationController
   private
 
   def phone_number_params
-    params.permit(:country, :phone_number)
+    params.permit(:area_code_id, :phone_number)
+  end
+
+  def set_user
+    @user = User.find(params[:id])
   end
 
   def set_phone_number
-    @phone_number = PhoneNumber.find(params[:id])
+    @phone_number = @user.phone_number if @user
   end
 end

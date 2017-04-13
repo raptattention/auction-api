@@ -1,30 +1,30 @@
 class OrdersController < ApplicationController
+	before_action :set_product
 	before_action :set_order, only: [:show, :update, :destroy]
 
-	# GET /orders
+	# GET /product/:product_id/order
 	def index
-    @orders = Order.all
-    json_response(@orders)
+    json_response(@product.order)
   end
 
-  # POST /orders
+  # POST /product/:product_id/order
   def create
-    @order = Order.create!(order_params)
+    @order = @product.order.create!(order_params)
     json_response(@order, :created)
   end
 
-  # PUT /order/:id
+  # PUT /product/:product_id/order
   def update
     @order.update(order_params)
     json_response(@order, :created)
   end
 
-  # GET /order/:id
+  # GET /product/:product_id/order
   def show
     json_response(@order)
   end
 
-  # DELETE /order/:id
+  # DELETE /product/:product_id/order
   def destroy
     @order.destroy
     head :no_content
@@ -33,10 +33,14 @@ class OrdersController < ApplicationController
   private
 
   def order_params
-    params.permit(:country, :order)
+    params.permit(:bid_id, :order_date)
+  end
+
+  def set_product
+  	@product = Product.find_by!(id: params[:product_id])
   end
 
   def set_order
-    @order = Order.find(params[:id])
+    @order = @product.orders.find_by!(id: params[:id]) if @product
   end
 end

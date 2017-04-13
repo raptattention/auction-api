@@ -1,30 +1,36 @@
 class BidsController < ApplicationController
+	before_action :set_user
 	before_action :set_bid, only: [:show, :update, :destroy]
 
-	# GET /bids
+	# GET /user/:user_id/bids
 	def index
-    @bids = Bid.all
-    json_response(@bids)
+    json_response(@user.bids)
   end
 
-  # POST /bids
+  # POST /user/:user_id/bids
   def create
-    @bid = Bid.create!(bid_params)
+    @bid = @user.bids.create!(bid_params)
     json_response(@bid, :created)
   end
 
-  # PUT /bid/:id
+  # PUT /user/:user_id/bids/:id
   def update
     @bid.update(bid_params)
     json_response(@bid, :created)
   end
 
-  # GET /bid/:id
+  # GET /user/:user_id/bids/:id
   def show
     json_response(@bid)
   end
 
-  # DELETE /bid/:id
+  # GET /product/:product_id/bids
+  def show_product_bids
+  	@product = Product.find_by!(id: params[:product_id])
+    json_response(@product.bids)
+  end
+
+  # DELETE /user/:user_id/bids/:id
   def destroy
     @bid.destroy
     head :no_content
@@ -36,7 +42,11 @@ class BidsController < ApplicationController
     params.permit(:user_id, :product_id, :bidding_date, :price)
   end
 
+  def set_user
+    @user = User.find_by!(id: params[:user_id])
+  end
+
   def set_bid
-    @bid = Bid.find(params[:id])
+    @bid = @user.bid.find_by!(id: params[:id]) if @user
   end
 end
